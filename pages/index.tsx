@@ -4,10 +4,6 @@ import {
   getPosts
 } from '../helpers/ghostApi';
 
-import { wrapper } from '../store'
-import { useSelector, useDispatch } from 'react-redux'
-import { selectBlogState} from '../store/blogs';
-
 type Post = {
   title: string,
   slug: string,
@@ -15,9 +11,6 @@ type Post = {
 }
 
 const Home: React.FC<{ posts: Post[] }> = (props) => {
-  const {  } = useSelector(selectBlogState)
-  const dispatch = useDispatch()
-
   const {
     posts = []
   } = props;
@@ -39,7 +32,7 @@ const Home: React.FC<{ posts: Post[] }> = (props) => {
 export const getStaticProps = async ({ params }) => {
       // we can set the initial state from here
       // we are setting to false but you can run your custom logic here
-      const posts = await getPosts();
+      const posts = (await getPosts()) || [];
       const allPosts = JSON.parse(JSON.stringify(posts));
       return {
         props: { 
