@@ -19,7 +19,7 @@ const Home: React.FC<{ posts: Post[] }> = (props) => {
   const dispatch = useDispatch()
 
   const {
-    posts
+    posts = []
   } = props;
   return (
     <div className={styles.container}>
@@ -36,20 +36,33 @@ const Home: React.FC<{ posts: Post[] }> = (props) => {
   )
 }
 
-export const getStaticProps = wrapper.getStaticProps(
-  (store) =>
-    async ({ params }) => {
+export const getStaticProps = async ({ params }) => {
       // we can set the initial state from here
       // we are setting to false but you can run your custom logic here
-      console.log("State on server", store.getState());
       const posts = await getPosts();
+      const allPosts = JSON.parse(JSON.stringify(posts));
       return {
         props: { 
-          posts
+          posts: allPosts
         },
         revalidate: 10
       }
-    }
-);
+  };
+
+// export const getStaticProps = wrapper.getStaticProps(
+//   (store) =>
+//     async ({ params }) => {
+//       // we can set the initial state from here
+//       // we are setting to false but you can run your custom logic here
+//       const posts = await getPosts();
+//       const allPosts = JSON.parse(JSON.stringify(posts));
+//       return {
+//         props: { 
+//           posts: allPosts
+//         },
+//         revalidate: 10
+//       }
+//     }
+// );
 
 export default Home;
